@@ -83,43 +83,83 @@ const App = () => {
       </Navbar>
 
       {/* Hero Section */}
-      <section id="home" className="min-vh-100 d-flex align-items-center">
+      <section id="home" className="hero-section min-vh-100 d-flex align-items-center">
         <Container>
-          <Row className="align-items-center">
-            <Col lg={7}>
+          <Row className="align-items-center py-5">
+            <Col lg={6} className="text-center text-lg-start">
               <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
-                <h1 className="display-3 fw-bold mb-3" style={{ color: '#154259' }}>
+                <div className="mb-3">
+                  <span className="badge rounded-pill bg-primary-subtle text-primary px-3 py-2 fw-semibold">
+                    Available for Projects
+                  </span>
+                </div>
+                <h1 className="display-2 fw-bold mb-3" style={{ color: '#154259', letterSpacing: '-1px' }}>
                   Crafting Digital <br />
                   <span className="gradient-text">Experiences That Wow</span>
                 </h1>
-                <p className="lead text-secondary mb-4 fs-4">
+                <p className="lead text-secondary mb-5 fs-4" style={{ maxWidth: '600px' }}>
                   I am a MERN stack developer dedicated to building high-performance,
                   scalable, and visually stunning web applications.
                 </p>
-                <div className="d-flex gap-3">
-                  <Button variant="primary" size="lg" className="rounded-pill shadow-sm">Explore My Work</Button>
-                  <Button variant="outline-dark" size="lg" className="rounded-pill">Let's Talk</Button>
+                <div className="d-flex gap-3 justify-content-center justify-content-lg-start mb-5">
+                  <Button variant="primary" size="lg" className="rounded-pill shadow px-5 py-3">Explore Projects</Button>
+                  <Button variant="outline-dark" size="lg" className="rounded-pill px-5 py-3">Let's Talk</Button>
+                </div>
+
+                <div className="d-flex align-items-center gap-4 justify-content-center justify-content-lg-start">
+                  <div className="d-flex">
+                    {[1, 2, 3, 4].map(i => (
+                      <div key={i} className="rounded-circle border border-2 border-white ms-n3" style={{ width: '40px', height: '40px', overflow: 'hidden', marginLeft: i === 1 ? '0' : '-12px', zIndex: 10 - i }}>
+                        <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="avatar" className="w-100 h-100 object-fit-cover" />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="small text-secondary fw-medium">
+                    Trusted by <span className="text-dark fw-bold">20+</span> clients worldwide
+                  </div>
                 </div>
               </motion.div>
             </Col>
-            <Col lg={5} className="d-none d-lg-block">
+
+            <Col lg={6} className="mt-5 mt-lg-0">
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.8 }}
-                className="ps-lg-5"
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="position-relative d-flex justify-content-center"
               >
-                <div className="p-2 rounded-circle overflow-hidden shadow-lg border-2 border-primary" style={{ borderStyle: 'solid', background: 'white' }}>
-                  <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop"
-                    alt="Profile"
-                    className="img-fluid rounded-circle"
-                  />
+                {/* Floating Elements */}
+                <div className="floating-element e1 shadow-lg">
+                  <Code size={24} className="text-primary" />
+                </div>
+                <div className="floating-element e2 shadow-lg">
+                  <Server size={24} className="text-success" />
+                </div>
+                <div className="floating-element e3 shadow-lg">
+                  <div className="d-flex align-items-center gap-2 px-2">
+                    <Database size={18} className="text-warning" />
+                    <span className="fw-bold small">MongoDB</span>
+                  </div>
+                </div>
+
+                <div className="img-container">
+                  <div className="p-3 rounded-circle overflow-hidden bg-white shadow-2xl" style={{ width: '400px', height: '400px' }}>
+                    <img
+                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop"
+                      alt="Profile"
+                      className="w-100 h-100 object-fit-cover rounded-circle shadow-inner"
+                    />
+                  </div>
                 </div>
               </motion.div>
             </Col>
           </Row>
         </Container>
+
+        <div className="scroll-indicator d-none d-md-flex">
+          <div className="mouse"></div>
+          <span>Scroll Down</span>
+        </div>
       </section>
 
       {/* About Section */}
