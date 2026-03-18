@@ -6,7 +6,9 @@ const morgan = require('morgan');
 
 // Load routes & controllers
 const projectRoutes = require('./routes/projectRoutes');
+const portfolioRoutes = require('./routes/portfolioRoutes');
 const { seedProjects } = require('./controllers/projectController');
+const { seedPortfolio } = require('./controllers/portfolioController');
 
 dotenv.config();
 
@@ -20,6 +22,7 @@ app.use(morgan('dev'));
 
 // Routes
 app.use('/api/projects', projectRoutes);
+app.use('/api/portfolio', portfolioRoutes);
 
 // Basic Route
 app.get('/', (req, res) => {
@@ -35,6 +38,7 @@ mongoose.connect(MONGO_URI)
 
         // Seed initial data
         await seedProjects();
+        await seedPortfolio();
 
         app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
     })

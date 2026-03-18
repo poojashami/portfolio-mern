@@ -21,6 +21,12 @@ const ProjectSchema = new mongoose.Schema({
         type: String,
         default: "#"
     },
+    category: {
+        type: String,
+        required: true,
+        enum: ['Company Project', 'Self Project'],
+        default: 'Company Project'
+    },
     createdAt: {
         type: Date,
         default: Date.now

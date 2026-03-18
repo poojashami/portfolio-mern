@@ -1,62 +1,168 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Nav, Navbar, Button, Card, Form, ProgressBar } from 'react-bootstrap';
-import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail, Twitter, Code, ExternalLink, Moon, Sun, Smartphone, Server, Database, Layers } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Github, Linkedin, Mail, Twitter, Code, ExternalLink, Moon, Sun, Smartphone, Server, Database, Layers, Briefcase, GraduationCap, Award, Calendar, MapPin } from 'lucide-react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
+import profileImg from './assets/profile.jpeg';
 
 const SkillsData = [
-  { name: 'React', level: 90, icon: <Layers size={20} /> },
-  { name: 'Node.js', level: 85, icon: <Server size={20} /> },
-  { name: 'MongoDB', level: 80, icon: <Database size={20} /> },
-  { name: 'JavaScript', level: 95, icon: <Code size={20} /> },
-  { name: 'UI/UX Design', level: 75, icon: <Smartphone size={20} /> },
+  { name: 'React', level: 90, icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
+  { name: 'Next.js', level: 85, icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg' },
+  { name: 'Node.js', level: 85, icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' },
+  { name: 'PHP Laravel', level: 80, icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg', subtext: 'Module Based' },
+  { name: 'MongoDB', level: 80, icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg' },
+  { name: 'JavaScript', level: 95, icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg' },
+  { name: 'Redux', level: 80, icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg' },
+];
+
+const ExperienceData = [
+  {
+    company: 'IndiCorp IT Solutions Pvt. Ltd.',
+    role: 'Software Developer',
+    duration: '01/2024 – present',
+    location: 'Noida, India'
+  },
+  {
+    company: 'BlueZone Online Marketing Solution Pvt. Ltd.',
+    role: 'Front-End Developer',
+    duration: '08/2023 – 11/2023',
+    location: 'Bengaluru, India'
+  },
+  {
+    company: 'Mityung Infotech Pvt. Ltd.',
+    role: 'Associate Software Engineer',
+    duration: '02/2022 – 06/2023',
+    location: 'Noida, India'
+  }
+];
+
+const CertificatesData = [
+  {
+    title: 'UI Technology',
+    issuer: 'Naresh IT Technologies',
+    date: 'June 2019',
+    location: 'Hyderabad'
+  },
+  {
+    title: 'Core Java',
+    issuer: 'OAIT India Education',
+    date: 'May 2017',
+    location: 'Aligarh'
+  },
+  {
+    title: 'AWS Cloud Practitioner Essentials',
+    issuer: 'AWS Training & Certification',
+    date: 'June 2025',
+    location: 'Online'
+  },
+  {
+    title: 'CoRover Certified AI Professional (C-CAP)',
+    issuer: 'Udemy (CoRover Pvt. Ltd.)',
+    date: 'January 2025',
+    location: 'Online'
+  },
+  {
+    title: 'AWS Technical Essentials',
+    issuer: 'AWS Training & Certification',
+    date: 'June 2025',
+    location: 'Online'
+  }
+];
+
+const EducationData = [
+  {
+    school: 'Kamala Nehru Institute of Technology, Sultanpur',
+    degree: 'Master of Computer Applications (2020)'
+  },
+  {
+    school: 'Dharam Samaj College, Dr. BR Ambedkar University',
+    degree: 'Bachelor of Computer Applications (2017)'
+  },
+  {
+    school: 'VV Girls Inter College, Aligarh, UP Board',
+    degree: 'Intermediate & High School (2011-2013)'
+  }
+];
+
+const ProjectsData = [
+    {
+      id: 1,
+      title: 'Flowt360',
+      description: 'Admin Panel with dynamic forms and multi-role UI for Users and Vendors.',
+      tech: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'Material UI'],
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop',
+      link: '#',
+      category: 'Company Project'
+    },
+    {
+      id: 2,
+      title: 'OTT Platform',
+      description: 'Responsive UI for OTT content with reusable video player and search components.',
+      tech: ['React.js', 'Next.js', 'JavaScript', 'Tailwind CSS'],
+      image: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?q=80&w=1000&auto=format&fit=crop',
+      link: '#',
+      category: 'Company Project'
+    },
+    {
+      id: 3,
+      title: 'ShipTotal',
+      description: 'Logistics/shipping dashboard with NDR Management and Delivery Tracking modules.',
+      tech: ['HTML5', 'CSS3', 'Bootstrap', 'JavaScript', 'jQuery'],
+      image: 'https://images.unsplash.com/photo-1566576721346-d4a3b4eaad5b?q=80&w=1000&auto=format&fit=crop',
+      link: '#',
+      category: 'Company Project'
+    },
+    {
+      id: 4,
+      title: 'Richkardz',
+      description: 'Digital smart business card platform with CRUD and API-based file handling.',
+      tech: ['Next.js', 'React.js', 'JavaScript', 'Axios'],
+      image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=1000&auto=format&fit=crop',
+      link: '#',
+      category: 'Company Project'
+    },
+    {
+      id: 5,
+      title: 'Parakaram',
+      description: 'Admin dashboard for team hiring with role-based UI and custom permissions.',
+      tech: ['React.js', 'PrimeReact', 'CoreUI', 'Axios'],
+      image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1000&auto=format&fit=crop',
+      link: '#',
+      category: 'Company Project'
+    },
+    {
+      id: 6,
+      title: 'Medzinc',
+      description: 'Healthcare web platform for managing medical records and patient/doctor data.',
+      tech: ['React.js', 'PrimeReact', 'CoreUI', 'CSS3'],
+      image: 'https://images.unsplash.com/photo-1504868584819-f8e90526354c?q=80&w=1000&auto=format&fit=crop',
+      link: '#',
+      category: 'Company Project'
+    },
+    {
+      id: 7,
+      title: 'Leave Management System',
+      description: 'A comprehensive system for employee leave requests, approvals, and balance tracking.',
+      tech: ['React.js', 'Node.js', 'Express.js', 'MongoDB'],
+      image: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=1000&auto=format&fit=crop',
+      link: '#',
+      category: 'Self Project'
+    },
+    {
+      id: 8,
+      title: 'Interactive World Map',
+      description: 'Dynamic world map with data visualization and location-based insights.',
+      tech: ['React.js', 'D3.js', 'SVG', 'JavaScript'],
+      image: 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=1000&auto=format&fit=crop',
+      link: '#',
+      category: 'Self Project'
+    }
 ];
 
 const App = () => {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/projects').catch(() => ({
-          data: [
-            {
-              id: 1,
-              title: 'E-commerce App',
-              description: 'A full-stack e-commerce platform using MERN',
-              tech: ['React', 'Node.js', 'MongoDB'],
-              image: 'https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=1000&auto=format&fit=crop',
-              link: '#'
-            },
-            {
-              id: 2,
-              title: 'Social Media Dashboard',
-              description: 'Interactive dashboard for managing social media',
-              tech: ['React', 'Chart.js', 'Firebase'],
-              image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop',
-              link: '#'
-            },
-            {
-              id: 3,
-              title: 'Health Tracking Web App',
-              description: 'Real-time health monitoring and data visualization',
-              tech: ['React', 'Socket.io', 'PostgreSQL'],
-              image: 'https://images.unsplash.com/photo-1504868584819-f8e90526354c?q=80&w=1000&auto=format&fit=crop',
-              link: '#'
-            }
-          ]
-        }));
-        setProjects(response.data);
-        setLoading(false);
-      } catch (err) {
-        setLoading(false);
-      }
-    };
-    fetchProjects();
-  }, []);
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
@@ -66,26 +172,27 @@ const App = () => {
   return (
     <div className="portfolio-app">
       {/* Header / Navbar */}
-      <Navbar expand="lg" variant="light" fixed="top" className="py-3 px-4 glass-card mx-2 my-2 border-0 rounded-pill">
+      <Navbar expand="lg" variant="light" fixed="top" className="py-2 px-4 glass-card border-0 border-bottom shadow-sm">
         <Container>
-          <Navbar.Brand href="#home" className="fw-bold fs-4 gradient-text">PORTFOLIO</Navbar.Brand>
+          <Navbar.Brand href="#home" className="fw-bold fs-5 gradient-text">POOJA SHAMI</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               <Nav.Link href="#home">Home</Nav.Link>
-              <Nav.Link href="#about">About</Nav.Link>
+              <Nav.Link href="#about">About Me</Nav.Link>
+              <Nav.Link href="#experience">Experience</Nav.Link>
               <Nav.Link href="#skills">Skills</Nav.Link>
+              <Nav.Link href="#certificates">Certificates</Nav.Link>
               <Nav.Link href="#projects">Projects</Nav.Link>
-              <Nav.Link href="#contact">Contact</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
 
       {/* Hero Section */}
-      <section id="home" className="hero-section min-vh-100 d-flex align-items-center">
+      <section id="home" className="hero-section pt-5 pb-3">
         <Container>
-          <Row className="align-items-center py-5">
+          <Row className="align-items-center pt-5">
             <Col lg={6} className="text-center text-lg-start">
               <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
                 <div className="mb-3">
@@ -93,31 +200,19 @@ const App = () => {
                     Available for Projects
                   </span>
                 </div>
-                <h1 className="display-2 fw-bold mb-3" style={{ color: '#154259', letterSpacing: '-1px' }}>
-                  Crafting Digital <br />
-                  <span className="gradient-text">Experiences That Wow</span>
+                <h1 className="display-4 fw-bold mb-3 mt-4" style={{ color: '#154259', letterSpacing: '-1px' }}>
+                  Pooja Shami <br />
+                  <span className="gradient-text fs-2">MERN Stack Developer</span>
                 </h1>
-                <p className="lead text-secondary mb-5 fs-4" style={{ maxWidth: '600px' }}>
-                  I am a MERN stack developer dedicated to building high-performance,
-                  scalable, and visually stunning web applications.
+                <p className="lead text-secondary mb-4 fs-6" style={{ maxWidth: '600px' }}>
+                  MERN Stack Developer with 3+ years of experience building scalable and responsive full-stack web applications. Skilled in creating reusable components, RESTful APIs, and dynamic UIs.
                 </p>
-                <div className="d-flex gap-3 justify-content-center justify-content-lg-start mb-5">
-                  <Button variant="primary" size="lg" className="rounded-pill shadow px-5 py-3">Explore Projects</Button>
-                  <Button variant="outline-dark" size="lg" className="rounded-pill px-5 py-3">Let's Talk</Button>
+                <div className="d-flex gap-3 justify-content-center justify-content-lg-start mb-4">
+                  <Button variant="primary" size="md" className="rounded-pill shadow px-4 py-2">Explore Projects</Button>
+                  <Button variant="outline-dark" size="md" className="rounded-pill px-4 py-2">Let's Talk</Button>
                 </div>
 
-                <div className="d-flex align-items-center gap-4 justify-content-center justify-content-lg-start">
-                  <div className="d-flex">
-                    {[1, 2, 3, 4].map(i => (
-                      <div key={i} className="rounded-circle border border-2 border-white ms-n3" style={{ width: '40px', height: '40px', overflow: 'hidden', marginLeft: i === 1 ? '0' : '-12px', zIndex: 10 - i }}>
-                        <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="avatar" className="w-100 h-100 object-fit-cover" />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="small text-secondary fw-medium">
-                    Trusted by <span className="text-dark fw-bold">20+</span> clients worldwide
-                  </div>
-                </div>
+               
               </motion.div>
             </Col>
 
@@ -142,10 +237,10 @@ const App = () => {
                   </div>
                 </div>
 
-                <div className="img-container">
-                  <div className="p-3 rounded-circle overflow-hidden bg-white shadow-2xl" style={{ width: '400px', height: '400px' }}>
+                <div className="img-container mt-4">
+                  <div className="p-2 rounded-circle overflow-hidden bg-white shadow-lg mx-auto" style={{ width: '320px', height: '320px' }}>
                     <img
-                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop"
+                      src={profileImg}
                       alt="Profile"
                       className="w-100 h-100 object-fit-cover rounded-circle shadow-inner"
                     />
@@ -156,10 +251,7 @@ const App = () => {
           </Row>
         </Container>
 
-        <div className="scroll-indicator d-none d-md-flex">
-          <div className="mouse"></div>
-          <span>Scroll Down</span>
-        </div>
+       
       </section>
 
       {/* About Section */}
@@ -182,25 +274,183 @@ const App = () => {
       </section>
 
       {/* Skills Section */}
-      <section id="skills">
+      <section id="skills" className="py-5 bg-white">
         <Container>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
-            <h2 className="section-title">Technical Expertise</h2>
-            <Row className="g-4">
-              {SkillsData.map((skill, index) => (
-                <Col md={6} lg={4} key={index}>
-                  <div className="glass-card h-100 shadow-sm border-0">
-                    <div className="d-flex align-items-center mb-3">
-                      <div className="p-2 rounded bg-primary text-white me-3 shadow-sm">{skill.icon}</div>
-                      <h4 className="mb-0 fw-bold" style={{ color: '#154259' }}>{skill.name}</h4>
+          <div className="text-center mb-5 mt-4">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
+              <h2 className="display-6 fw-bold mb-3" style={{ color: '#154259', letterSpacing: '-0.5px' }}>Technical Expertise</h2>
+              <div className="mx-auto" style={{ width: '60px', height: '3px', backgroundColor: '#0d6efd' }}></div>
+            </motion.div>
+          </div>
+
+          <Row className="g-4 justify-content-center mb-5">
+            {SkillsData.map((skill, index) => (
+              <Col md={6} lg={4} key={index}>
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  className="h-100"
+                >
+                  <div className="skill-card h-100 p-4 bg-white border" style={{ borderRadius: '10px', transition: 'all 0.3s ease', borderColor: '#eaeaea' }}
+                    onMouseEnter={(e) => { e.currentTarget.classList.add('shadow-sm'); e.currentTarget.style.borderColor = '#3b82f6' }}
+                    onMouseLeave={(e) => { e.currentTarget.classList.remove('shadow-sm'); e.currentTarget.style.borderColor = '#eaeaea' }}>
+
+                    <div className="d-flex justify-content-between align-items-center mb-4">
+                      <div className="d-flex align-items-center gap-3">
+                        <img src={skill.icon} alt={skill.name} style={{ width: '28px', height: '28px' }} />
+                        <div>
+                          <h5 className="mb-0 fw-bold" style={{ color: '#2c3e50', fontSize: '1.25rem' }}>{skill.name}</h5>
+                          {skill.subtext && <small className="text-primary fw-medium">{skill.subtext}</small>}
+                        </div>
+                      </div>
+                      <span className="fw-bold fs-6" style={{ color: '#3b82f6' }}>{skill.level}%</span>
                     </div>
-                    <ProgressBar now={skill.level} variant="primary" style={{ height: '8px' }} className="bg-light" />
-                    <div className="text-end mt-2 small text-secondary">{skill.level}% Proficiency</div>
+
+                    <div className="progress" style={{ height: '8px', backgroundColor: '#f0f4f8', borderRadius: '10px' }}>
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${skill.level}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1.2, delay: 0.2 + index * 0.1, ease: 'easeOut' }}
+                        className="progress-bar"
+                        style={{ backgroundColor: '#3b82f6', borderRadius: '10px' }}
+                      />
+                    </div>
                   </div>
-                </Col>
-              ))}
-            </Row>
-          </motion.div>
+                </motion.div>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </section>
+
+      {/* Experience & Education Section */}
+      <section id="experience" className="py-5 bg-white">
+        <Container>
+          <div className="text-center mb-5 mt-4">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
+              <h2 className="display-6 fw-bold mb-3" style={{ color: '#154259', letterSpacing: '-0.5px' }}>Experience & Education</h2>
+              <div className="mx-auto" style={{ width: '60px', height: '3px', backgroundColor: '#0d6efd' }}></div>
+            </motion.div>
+          </div>
+
+          <Row className="g-4">
+            <Col lg={6}>
+              <div className="d-flex align-items-center gap-3 mb-4">
+                <div className="d-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle" style={{ width: '45px', height: '45px' }}>
+                  <Briefcase size={22} />
+                </div>
+                <h3 className="fw-bold mb-0" style={{ color: '#154259' }}>Experience</h3>
+              </div>
+              
+              <div className="experience-timeline position-relative ps-4 ms-2" style={{ borderLeft: '2px dashed #dee2e6' }}>
+                {ExperienceData.map((exp, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="mb-4 position-relative"
+                  >
+                    {/* Timeline Dot */}
+                    <div className="position-absolute bg-primary rounded-circle shadow-sm" style={{ width: '16px', height: '16px', left: '-33px', top: '10px', border: '3px solid white' }}></div>
+                    
+                    <div className="p-4 bg-white border shadow-sm hover-lift" style={{ borderRadius: '1rem', transition: 'all 0.3s ease', borderColor: '#eaeaea' }}
+                         onMouseEnter={(e) => { e.currentTarget.classList.add('shadow'); e.currentTarget.style.borderColor = '#0d6efd' }}
+                         onMouseLeave={(e) => { e.currentTarget.classList.remove('shadow'); e.currentTarget.style.borderColor = '#eaeaea' }}>
+                      <div className="d-flex justify-content-between align-items-lg-center flex-column flex-lg-row mb-2 gap-2">
+                        <h5 className="fw-bold mb-0 text-dark">{exp.role}</h5>
+                        <span className="badge bg-light text-primary border border-primary-subtle py-1 px-3 rounded-pill fw-medium d-flex align-items-center gap-1" style={{ fontSize: '0.75rem' }}>
+                          <Calendar size={12} /> {exp.duration}
+                        </span>
+                      </div>
+                      <h6 className="fw-semibold text-primary mb-2">{exp.company}</h6>
+                      <div className="text-secondary small d-flex align-items-center gap-1">
+                        <MapPin size={14} /> {exp.location}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </Col>
+
+            <Col lg={6}>
+              <div className="d-flex align-items-center gap-3 mb-4">
+                <div className="d-flex align-items-center justify-content-center bg-success-subtle text-success rounded-circle" style={{ width: '45px', height: '45px' }}>
+                  <GraduationCap size={22} />
+                </div>
+                <h3 className="fw-bold mb-0" style={{ color: '#154259' }}>Education</h3>
+              </div>
+              
+              <div className="education-list">
+                {EducationData.map((edu, index) => (
+                   <motion.div
+                   key={index}
+                   initial={{ opacity: 0, x: 20 }}
+                   whileInView={{ opacity: 1, x: 0 }}
+                   viewport={{ once: true }}
+                   transition={{ duration: 0.5, delay: index * 0.1 }}
+                   className="mb-3 p-4 bg-white border shadow-sm d-flex gap-3 align-items-center hover-lift"
+                   style={{ borderRadius: '1rem', transition: 'all 0.3s ease', borderColor: '#eaeaea', borderLeft: '4px solid #198754' }}
+                   onMouseEnter={(e) => { e.currentTarget.classList.add('shadow'); e.currentTarget.style.transform = 'translateY(-2px)' }}
+                   onMouseLeave={(e) => { e.currentTarget.classList.remove('shadow'); e.currentTarget.style.transform = 'translateY(0)' }}>
+                     <div className="flex-grow-1">
+                       <h6 className="fw-bold mb-2 text-dark" style={{ fontSize: '1.1rem' }}>{edu.degree}</h6>
+                       <p className="mb-0 text-secondary" style={{ fontSize: '0.9rem' }}>{edu.school}</p>
+                     </div>
+                 </motion.div>
+                ))}
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      {/* Certificates Section */}
+      <section id="certificates" className="py-5 bg-white border-top">
+        <Container>
+          <div className="text-center mb-5 mt-4">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
+              <h2 className="display-6 fw-bold mb-3" style={{ color: '#154259', letterSpacing: '-0.5px' }}>Licenses & Certifications</h2>
+              <div className="mx-auto" style={{ width: '60px', height: '3px', backgroundColor: '#0d6efd' }}></div>
+            </motion.div>
+          </div>
+
+          <Row className="g-4 justify-content-center">
+            {CertificatesData.map((cert, index) => (
+              <Col md={6} lg={3} key={index}>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  className="h-100"
+                >
+                  <div className="p-4 bg-white border shadow-sm h-100 hover-lift text-center d-flex flex-column align-items-center position-relative overflow-hidden" 
+                       style={{ borderRadius: '1.2rem', transition: 'all 0.3s ease', borderColor: '#eaeaea' }}
+                       onMouseEnter={(e) => { e.currentTarget.classList.add('shadow-lg'); e.currentTarget.style.borderColor = '#ffb703'; e.currentTarget.style.transform = 'translateY(-5px)' }}
+                       onMouseLeave={(e) => { e.currentTarget.classList.remove('shadow-lg'); e.currentTarget.style.borderColor = '#eaeaea'; e.currentTarget.style.transform = 'translateY(0)' }}>
+                    
+                    {/* Decorative Top Accent */}
+                    <div className="position-absolute top-0 start-0 w-100" style={{ height: '4px', backgroundColor: '#ffb703' }}></div>
+
+                    <div className="d-flex align-items-center justify-content-center bg-warning-subtle text-warning rounded-circle mb-3 mt-2" style={{ width: '60px', height: '60px' }}>
+                      <Award size={28} />
+                    </div>
+                    
+                    <h5 className="fw-bold mb-2 text-dark" style={{ fontSize: '1.1rem' }}>{cert.title}</h5>
+                    <p className="text-secondary fw-medium mb-1 small">{cert.issuer}</p>
+                    <p className="text-muted small mb-auto d-flex align-items-center gap-1 justify-content-center"><MapPin size={12}/> {cert.location}</p>
+                    
+                    <div className="badge bg-light text-dark border mt-4 px-3 py-2 rounded-pill w-100 fw-medium">Issued {cert.date}</div>
+                  </div>
+                </motion.div>
+              </Col>
+            ))}
+          </Row>
         </Container>
       </section>
 
@@ -209,61 +459,52 @@ const App = () => {
         <Container>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
             <h2 className="section-title">Featured Projects</h2>
-            <Row className="g-4">
-              {projects.map((project, index) => (
-                <Col md={6} lg={4} key={index}>
-                  <motion.div variants={fadeInUp} whileHover={{ scale: 1.05 }}>
-                    <Card className="h-100 overflow-hidden border-0 shadow-sm bg-white" style={{ borderRadius: '1.5rem' }}>
-                      <div style={{ height: '220px', overflow: 'hidden' }}>
-                        <Card.Img variant="top" src={project.image} alt={project.title} style={{ transition: 'transform 0.5s ease' }} className="hover-zoom" />
-                      </div>
-                      <Card.Body>
-                        <Card.Title className="fw-bold mb-2" style={{ color: '#154259' }}>{project.title}</Card.Title>
-                        <Card.Text className="text-secondary small mb-3">{project.description}</Card.Text>
-                        <div className="mb-3 d-flex flex-wrap gap-2">
-                          {project.tech.map((t, i) => (
-                            <span key={i} className="badge bg-light text-primary border border-primary-subtle p-2">{t}</span>
-                          ))}
-                        </div>
-                        <Button variant="outline-primary" size="sm" className="w-100 rounded-pill">View Details <ExternalLink size={14} /></Button>
-                      </Card.Body>
-                    </Card>
-                  </motion.div>
-                </Col>
+            
+            <div className="d-flex justify-content-center gap-3 mb-5">
+              {['All', 'Company Project', 'Self Project'].map(cat => (
+                <button 
+                  key={cat}
+                  className={`btn rounded-pill px-4 py-2 fw-semibold ${selectedCategory === cat ? 'btn-primary shadow-lg' : 'btn-outline-primary bg-white text-primary'}`}
+                  onClick={() => setSelectedCategory(cat)}
+                  style={{ transition: 'all 0.3s ease', letterSpacing: '0.5px', border: selectedCategory === cat ? 'none' : '1px solid #0d6efd' }}
+                >
+                  {cat}
+                </button>
               ))}
-            </Row>
-          </motion.div>
-        </Container>
-      </section>
+            </div>
 
-      {/* Contact Section */}
-      <section id="contact">
-        <Container>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
-            <h2 className="section-title">Get In Touch</h2>
-            <Row className="justify-content-center">
-              <Col lg={6}>
-                <div className="glass-card shadow-sm">
-                  <Form>
-                    <Form.Group className="mb-4">
-                      <Form.Label className="text-secondary small fw-bold">FULL NAME</Form.Label>
-                      <Form.Control type="text" placeholder="Enter your name" className="bg-light border-0 p-3 shadow-none rounded-3" />
-                    </Form.Group>
-                    <Form.Group className="mb-4">
-                      <Form.Label className="text-secondary small fw-bold">EMAIL ADDRESS</Form.Label>
-                      <Form.Control type="email" placeholder="name@example.com" className="bg-light border-0 p-3 shadow-none rounded-3" />
-                    </Form.Group>
-                    <Form.Group className="mb-4">
-                      <Form.Label className="text-secondary small fw-bold">YOUR MESSAGE</Form.Label>
-                      <Form.Control as="textarea" rows={4} placeholder="Your message here..." className="bg-light border-0 p-3 shadow-none rounded-3" />
-                    </Form.Group>
-                    <Button variant="primary" className="w-100 py-3 rounded-pill fw-bold shadow-sm" type="submit">
-                      Send Message <Mail size={18} className="ms-2" />
-                    </Button>
-                  </Form>
+            <div className="row g-4">
+              {ProjectsData
+                .filter(p => selectedCategory === 'All' || p.category === selectedCategory)
+                .map((project) => (
+                <div className="col-md-6 col-lg-4" key={project.id}>
+                  <Card className="h-100 overflow-hidden border-0 bg-white" style={{ borderRadius: '1.2rem', boxShadow: '0 10px 30px rgba(0,0,0,0.08)', transition: 'all 0.3s ease' }}>
+                    <div className="position-relative" style={{ height: '220px', overflow: 'hidden' }}>
+                      <Card.Img variant="top" src={project.image} alt={project.title} style={{ transition: 'transform 0.6s ease' }} className="hover-zoom" />
+                      <div className="position-absolute top-0 start-0 m-3">
+                        <span className={`badge ${project.category === 'Self Project' ? 'bg-success' : 'bg-primary'} shadow-sm px-3 py-2 rounded-pill fw-medium`} style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>
+                          {project.category}
+                        </span>
+                      </div>
+                    </div>
+                    <Card.Body className="d-flex flex-column">
+                      <Card.Title className="fw-bold mb-2" style={{ color: '#154259' }}>{project.title}</Card.Title>
+                      <Card.Text className="text-secondary small mb-4" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {project.description}
+                      </Card.Text>
+                      <div className="mb-4 d-flex flex-wrap gap-2">
+                        {project.tech.map((t, i) => (
+                          <span key={i} className="badge bg-light text-primary border border-primary-subtle py-1 px-2 rounded-1 fw-normal" style={{ fontSize: '0.75rem' }}>{t}</span>
+                        ))}
+                      </div>
+                      <Button variant="outline-primary" className="w-100 rounded-pill fw-semibold py-2 mt-auto d-flex justify-content-center align-items-center gap-2" style={{ transition: 'all 0.3s ease' }}>
+                        View Details <ExternalLink size={16} />
+                      </Button>
+                    </Card.Body>
+                  </Card>
                 </div>
-              </Col>
-            </Row>
+              ))}
+            </div>
           </motion.div>
         </Container>
       </section>
