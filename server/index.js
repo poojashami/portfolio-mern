@@ -40,11 +40,15 @@ mongoose.connect(MONGO_URI)
         await seedProjects();
         await seedPortfolio();
 
-        app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+        if (process.env.NODE_ENV !== 'production') {
+            app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+        }
     })
     .catch(err => {
         console.error('MongoDB connection error:', err);
-        // Fallback for demo: Still start the server even if DB fails
-        console.log('Starting server in fallback mode...');
-        app.listen(PORT, () => console.log(`Server running on port ${PORT} (DB Offline)`));
+        if (process.env.NODE_ENV !== 'production') {
+            app.listen(PORT, () => console.log(`Server running on port ${PORT} (DB Offline)`));
+        }
     });
+
+module.exports = app;

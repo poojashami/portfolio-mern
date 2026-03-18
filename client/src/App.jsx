@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Nav, Navbar, Button, Card, Form, ProgressBar } from 'react-bootstrap';
+import { Container, Row, Col, Nav, Navbar, Button, Card, Form, ProgressBar, Carousel } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Github, Linkedin, Mail, Twitter, Code, ExternalLink, Moon, Sun, Smartphone, Server, Database, Layers, Briefcase, GraduationCap, Award, Calendar, MapPin } from 'lucide-react';
 import axios from 'axios';
@@ -163,6 +163,50 @@ const ProjectsData = [
 
 const App = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [itemsPerSlide, setItemsPerSlide] = useState(3);
+  
+  // Dynamic Data State
+  const [skills, setSkills] = useState(SkillsData);
+  const [experience, setExperience] = useState(ExperienceData);
+  const [education, setEducation] = useState(EducationData);
+  const [projects, setProjects] = useState(ProjectsData);
+  const [certificates, setCertificates] = useState(CertificatesData);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) setItemsPerSlide(1);
+      else if (window.innerWidth < 992) setItemsPerSlide(2);
+      else setItemsPerSlide(3);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    const fetchData = async () => {
+      try {
+        const [skillsRes, expRes, eduRes, projRes] = await Promise.all([
+          axios.get('/api/portfolio/skills'),
+          axios.get('/api/portfolio/experience'),
+          axios.get('/api/portfolio/education'),
+          axios.get('/api/projects')
+        ]);
+        
+        if(skillsRes.data.length > 0) setSkills(skillsRes.data);
+        if(expRes.data.length > 0) setExperience(expRes.data);
+        if(eduRes.data.length > 0) setEducation(eduRes.data);
+        if(projRes.data.length > 0) setProjects(projRes.data);
+      } catch (err) {
+        console.error('Error fetching data from API:', err);
+      }
+    };
+    fetchData();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const certificateChunks = [];
+  for (let i = 0; i < certificates.length; i += itemsPerSlide) {
+    certificateChunks.push(certificates.slice(i, i + itemsPerSlide));
+  }
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
@@ -284,7 +328,7 @@ const App = () => {
           </div>
 
           <Row className="g-4 justify-content-center mb-5">
-            {SkillsData.map((skill, index) => (
+            {skills.map((skill, index) => (
               <Col md={6} lg={4} key={index}>
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
@@ -346,7 +390,7 @@ const App = () => {
               </div>
               
               <div className="experience-timeline position-relative ps-4 ms-2" style={{ borderLeft: '2px dashed #dee2e6' }}>
-                {ExperienceData.map((exp, index) => (
+                {experience.map((exp, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -20 }}
@@ -386,7 +430,7 @@ const App = () => {
               </div>
               
               <div className="education-list">
-                {EducationData.map((edu, index) => (
+                {education.map((edu, index) => (
                    <motion.div
                    key={index}
                    initial={{ opacity: 0, x: 20 }}
@@ -419,38 +463,52 @@ const App = () => {
             </motion.div>
           </div>
 
-          <Row className="g-4 justify-content-center">
-            {CertificatesData.map((cert, index) => (
-              <Col md={6} lg={3} key={index}>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className="h-100"
-                >
-                  <div className="p-4 bg-white border shadow-sm h-100 hover-lift text-center d-flex flex-column align-items-center position-relative overflow-hidden" 
-                       style={{ borderRadius: '1.2rem', transition: 'all 0.3s ease', borderColor: '#eaeaea' }}
-                       onMouseEnter={(e) => { e.currentTarget.classList.add('shadow-lg'); e.currentTarget.style.borderColor = '#ffb703'; e.currentTarget.style.transform = 'translateY(-5px)' }}
-                       onMouseLeave={(e) => { e.currentTarget.classList.remove('shadow-lg'); e.currentTarget.style.borderColor = '#eaeaea'; e.currentTarget.style.transform = 'translateY(0)' }}>
-                    
-                    {/* Decorative Top Accent */}
-                    <div className="position-absolute top-0 start-0 w-100" style={{ height: '4px', backgroundColor: '#ffb703' }}></div>
+          <Carousel 
+            variant="dark"
+            indicators={true} 
+            controls={true} 
+            className="certificate-carousel pb-5"
+            interval={3000}
+          >
+            {certificateChunks.map((chunk, slideIndex) => (
+              <Carousel.Item key={slideIndex}>
+                <div className="px-4 px-md-5">
+                  <Row className="g-4 justify-content-center">
+                  {chunk.map((cert, index) => (
+                    <Col md={6} lg={4} key={index}>
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: index * 0.1 }}
+                        className="h-100"
+                      >
+                        <div className="p-4 bg-white border shadow-sm h-100 hover-lift text-center d-flex flex-column align-items-center position-relative overflow-hidden" 
+                             style={{ borderRadius: '1.2rem', transition: 'all 0.3s ease', borderColor: '#eaeaea' }}
+                             onMouseEnter={(e) => { e.currentTarget.classList.add('shadow-lg'); e.currentTarget.style.borderColor = '#ffb703'; e.currentTarget.style.transform = 'translateY(-5px)' }}
+                             onMouseLeave={(e) => { e.currentTarget.classList.remove('shadow-lg'); e.currentTarget.style.borderColor = '#eaeaea'; e.currentTarget.style.transform = 'translateY(0)' }}>
+                          
+                          {/* Decorative Top Accent */}
+                          <div className="position-absolute top-0 start-0 w-100" style={{ height: '4px', backgroundColor: '#ffb703' }}></div>
 
-                    <div className="d-flex align-items-center justify-content-center bg-warning-subtle text-warning rounded-circle mb-3 mt-2" style={{ width: '60px', height: '60px' }}>
-                      <Award size={28} />
-                    </div>
-                    
-                    <h5 className="fw-bold mb-2 text-dark" style={{ fontSize: '1.1rem' }}>{cert.title}</h5>
-                    <p className="text-secondary fw-medium mb-1 small">{cert.issuer}</p>
-                    <p className="text-muted small mb-auto d-flex align-items-center gap-1 justify-content-center"><MapPin size={12}/> {cert.location}</p>
-                    
-                    <div className="badge bg-light text-dark border mt-4 px-3 py-2 rounded-pill w-100 fw-medium">Issued {cert.date}</div>
-                  </div>
-                </motion.div>
-              </Col>
+                          <div className="d-flex align-items-center justify-content-center bg-warning-subtle text-warning rounded-circle mb-3 mt-2" style={{ width: '60px', height: '60px' }}>
+                            <Award size={28} />
+                          </div>
+                          
+                          <h5 className="fw-bold mb-2 text-dark" style={{ fontSize: '1.1rem' }}>{cert.title}</h5>
+                          <p className="text-secondary fw-medium mb-1 small">{cert.issuer}</p>
+                          <p className="text-muted small mb-auto d-flex align-items-center gap-1 justify-content-center"><MapPin size={12}/> {cert.location}</p>
+                          
+                          <div className="badge bg-light text-dark border mt-4 px-3 py-2 rounded-pill w-100 fw-medium">Issued {cert.date}</div>
+                        </div>
+                      </motion.div>
+                    </Col>
+                  ))}
+                  </Row>
+                </div>
+              </Carousel.Item>
             ))}
-          </Row>
+          </Carousel>
         </Container>
       </section>
 
@@ -474,7 +532,7 @@ const App = () => {
             </div>
 
             <div className="row g-4">
-              {ProjectsData
+              {projects
                 .filter(p => selectedCategory === 'All' || p.category === selectedCategory)
                 .map((project) => (
                 <div className="col-md-6 col-lg-4" key={project.id}>
