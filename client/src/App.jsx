@@ -190,10 +190,10 @@ const App = () => {
           axios.get('/api/projects')
         ]);
         
-        if(skillsRes.data.length > 0) setSkills(skillsRes.data);
-        if(expRes.data.length > 0) setExperience(expRes.data);
-        if(eduRes.data.length > 0) setEducation(eduRes.data);
-        if(projRes.data.length > 0) setProjects(projRes.data);
+        if (Array.isArray(skillsRes.data)) setSkills(skillsRes.data);
+        if (Array.isArray(expRes.data)) setExperience(expRes.data);
+        if (Array.isArray(eduRes.data)) setEducation(eduRes.data);
+        if (Array.isArray(projRes.data)) setProjects(projRes.data);
       } catch (err) {
         console.error('Error fetching data from API:', err);
       }
